@@ -40,6 +40,7 @@ func customErrorExample() {
 	fmt.Println(result)
 }
 
+// ErrorExamples contains examples of error handling
 func ErrorExamples() {
 	fmt.Println("\nError handling")
 	fmt.Println("==============")

@@ -7,4 +7,5 @@ func main() {
 	examples.FuncExamples()
 	examples.StructExamples()
 	examples.ErrorExamples()
+	examples.ConcurrentExamples()
 }

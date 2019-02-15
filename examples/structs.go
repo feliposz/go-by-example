@@ -77,6 +77,7 @@ func interfaceExamples() {
 	describeGeometry(c)
 }
 
+// StructExamples contains examples of structs
 func StructExamples() {
 	fmt.Println("\nSome struct examples")
 	fmt.Println("====================")

@@ -146,6 +146,7 @@ func rangeExample() {
 	fmt.Println(all)
 }
 
+// BasicExamples contains examples of basic functionality in go
 func BasicExamples() {
 	fmt.Println("\nSome basic functionality in go")
 	fmt.Println("==============================")

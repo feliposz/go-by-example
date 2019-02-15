@@ -64,6 +64,7 @@ func closureExample() {
 	warn("dange zone")
 }
 
+// FuncExamples contains examples of functions in go
 func FuncExamples() {
 	fmt.Println("\nFunctions in go")
 	fmt.Println("===============")
