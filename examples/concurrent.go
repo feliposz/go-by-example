@@ -153,18 +153,153 @@ func selectExample() {
 
 }
 
+func timeoutExample() {
+	c1 := make(chan string, 1)
+	go func() {
+		time.Sleep(2 * time.Second)
+		c1 <- "result 1"
+	}()
+
+	select {
+	case res := <-c1:
+		fmt.Println(res)
+	case <-time.After(1 * time.Second):
+		fmt.Println("timeout 1")
+	}
+
+	c2 := make(chan string, 1)
+	go func() {
+		time.Sleep(2 * time.Second)
+		c2 <- "result 2"
+	}()
+
+	select {
+	case res := <-c2:
+		fmt.Println(res)
+	case <-time.After(3 * time.Second):
+		fmt.Println("timeout 2")
+	}
+
+}
+
+func nonBlockingExample() {
+	messages := make(chan string)
+	signals := make(chan bool)
+
+	select {
+	case msg := <-messages:
+		fmt.Println("received message", msg)
+	default:
+		fmt.Println("no message received")
+	}
+
+	msg := "hi"
+	select {
+	case messages <- msg:
+		fmt.Println("sent message", msg)
+	default:
+		fmt.Println("no message sent")
+	}
+
+	select {
+	case msg := <-messages:
+		fmt.Println("received message", msg)
+	case sig := <-signals:
+		fmt.Println("received signal", sig)
+	default:
+		fmt.Println("no activity")
+	}
+}
+
+func botChatExample() {
+
+	talk := make(chan string, 1)
+	done := make(chan bool, 1)
+	end := make(chan bool, 1)
+
+	go func() {
+		for i := 0; i < 5; i++ {
+			talk <- fmt.Sprint("hey", i)
+			time.Sleep(time.Second)
+		}
+		done <- true
+	}()
+
+	go func() {
+		finish := false
+		for !finish {
+			select {
+			case msg := <-talk:
+				fmt.Println("listened: ", msg)
+			case <-done:
+				finish = true
+			default:
+				fmt.Println("waiting...")
+				time.Sleep(333 * time.Millisecond)
+			}
+		}
+		fmt.Println("bye")
+		end <- true
+	}()
+	<-end
+}
+
+func closingExample() {
+	jobs := make(chan int, 5)
+	done := make(chan bool)
+
+	go func() {
+		for {
+			j, more := <-jobs
+			if more {
+				fmt.Println("received job", j)
+			} else {
+				fmt.Println("received all jobs")
+				done <- true
+				return
+			}
+		}
+	}()
+
+	for j := 1; j <= 3; j++ {
+		jobs <- j
+		fmt.Println("sent job", j)
+	}
+	close(jobs)
+	fmt.Println("sent all jobs")
+
+	<-done
+}
+
+func rangeChannelExample() {
+	queue := make(chan string, 3)
+
+	for i := 0; i < 3; i++ {
+		queue <- fmt.Sprint("item", i)
+	}
+	close(queue)
+
+	for elem := range queue {
+		fmt.Println(elem)
+	}
+}
+
 // ConcurrentExamples contains examples of using go routines
 func ConcurrentExamples() {
 	fmt.Println("\nConcurrency in go")
 	fmt.Println("=================")
 
-	/*
-		goRoutineExample()
-		multipleExample()
-		channelExample()
-		bufferedExample()
-		synchronizationExample()
-		channelDirectionsExample()
-	*/
+	goRoutineExample()
+	multipleExample()
+	channelExample()
+	bufferedExample()
+	synchronizationExample()
+	channelDirectionsExample()
 	selectExample()
+	// deadlockExample()
+	timeoutExample()
+	nonBlockingExample()
+	botChatExample()
+	closingExample()
+	rangeChannelExample()
 }

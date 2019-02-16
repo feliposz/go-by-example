@@ -16,7 +16,8 @@ func valuesExample() {
 
 func variablesExample() {
 	var a = "simple"
-	var b int = 123
+	var b int
+	b = 123
 	c := 45.67
 	d := float64(b) + c
 	fmt.Println(a, b, c, d)
