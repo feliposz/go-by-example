@@ -8,4 +8,7 @@ func main() {
 	examples.StructExamples()
 	examples.ErrorExamples()
 	examples.ConcurrentExamples()
+	examples.DataExamples()
+	examples.CollectionExamples()
+	examples.StringExamples()
 }
